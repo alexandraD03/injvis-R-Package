@@ -1,11 +1,10 @@
 Package: injvis
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Sports Injury Data Visualisation
 Version: 0.1.0
-Author: Who wrote it
+Author: Alexandra Dooley, Brice Thu, Alexander Brinkman, Joel Mclean, Utsav Chadha, Andisheh Saffarian
 Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: This package can be used to visualise sports injury data using various visual stimuli such as heatmaps. 
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
