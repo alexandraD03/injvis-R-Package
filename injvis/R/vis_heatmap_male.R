@@ -8,18 +8,19 @@ vis_heatmap_male <- function(data, body_view, colour_palette, legend){
   library(RColorBrewer)
 
   if(body_view == "front"){
-    body <- image_read("/Users/alexandradooley/Desktop/Uni/Year 4/COMP3850/COMP3850-Group-15-R-Package/injvis/Body Images/body_male_front.png")
-    plot(body)
+    #body <- image_read("/Users/alexandradooley/Desktop/Uni/Year 4/COMP3850/COMP3850-Group-15-R-Package/injvis/Body Images/body_male_front.png")
+    body <- image_read("Body Images/body_male_front.png")
+    #plot(body)
 
-    overlay <- image_blank(width = 20,
-                           height = 20,
-                           color = "#FF000080") # Red with 50% opacity
+    #overlay <- image_blank(width = 20,
+                     #      height = 20,
+                     #      color = "#FF000080") # Red with 50% opacity
 
     # Composite the overlay on top
-    img_colored <- image_composite(body, overlay, operator = "atop")
+   # img_colored <- image_composite(body, overlay, operator = "atop")
 
     # Plot the result
-    plot(img_colored)
+    #plot(img_colored)
 
     #heat.colors(4, rev = FALSE))
 
@@ -107,10 +108,10 @@ vis_heatmap_male <- function(data, body_view, colour_palette, legend){
     plot(final_img)
 
   } else if (body_view == "back") {
-    body <- image_read("/Users/alexandradooley/Desktop/Uni/Year 4/COMP3850/COMP3850-Group-15-R-Package/injvis/Body Images/body_male_back.jpg")
+    body <- image_read("Body Images/body_male_back.png")
 
   } else if (body_view == "side") {
-    body <- image_read("/Users/alexandradooley/Desktop/Uni/Year 4/COMP3850/COMP3850-Group-15-R-Package/injvis/Body Images/body_male_side.jpg")
+    body <- image_read("Body Images/body_male_side.png")
 
   } else {
     print("Please choose an appropriate body view (either front, back or side")
