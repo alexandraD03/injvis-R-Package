@@ -1,4 +1,4 @@
-vis_heatmap_male <- function(data, body_view, colour_palette = "YIOrRd", legend){
+vis_heatmap_male <- function(data, body_view, colour_palette, legend){
   library(grid)
   library(ggplot2)
   library(recolorize)
@@ -40,16 +40,18 @@ vis_heatmap_male <- function(data, body_view, colour_palette = "YIOrRd", legend)
    # palette_func <- colorRampPalette(c("blue", "green", "yellow", "red"))
       #heat.colors(4, rev = FALSE)
       #colorRampPalette(c("blue", "green", "yellow", "red"))
-    palette_colours <- heat.colors(100, rev = FALSE)
+    palette_colours <- colour_palette
+      # heat.colors(100, rev = FALSE)
       #palette_func(100)
 
     body_regions <- data.frame(
       region = c("Head and neck", "Upper limb", "Trunk", "Lower limb", "Unspecified"),
-      # x_start = c(0.4, 0.0, 0.6, 0.4, 0.4, 0.5),
-      # x_end   = c(0.6, 0.4, 1.0, 0.6, 0.5, 0.6),
-      # y_start = c(0.2, 0.2, 0.2, 0.4, 0.6, 0.6),
-      # y_end   = c(0.4, 0.5, 0.5, 0.6, 1.0, 1.0),
-      # heat_value = c(0.8, 0.5, 0.5, 0.7, 0.6, 0.6)
+      x_start = c(0.25, 0.0, 0.3, 0.33, 0),
+      x_end   = c(0.75, 1, 0.7, 0.7, 0.05),
+      y_start = c(0.95, 0.4, 0.2, 0, 0),
+      y_end   = c(1, 0.8, 0.8, 0.6, 0.9),
+      frequency = data$frequency
+      #  c(0.8, 0.5, 0.5, 0.7, 0.6, 0.6)
     )
 
     body_areas <- data.frame(
@@ -63,9 +65,15 @@ vis_heatmap_male <- function(data, body_view, colour_palette = "YIOrRd", legend)
       # heat_value = c(0.8, 0.5, 0.5, 0.7, 0.6, 0.6)
     )
 
+    body_regions$norm_freq <- regions$frequency / sum(regions$frequency)
+    #<- (regions$frequency - min(regions$frequency)) /
+    #  (max(regions$frequency) - min(regions$frequency))
+  #  regions$frequency / sum(regions$frequency)
+
+
     # Now for each region, create a colored transparent rectangle
-    for (i in 1:nrow(regions)) {
-      r <- regions[i,]
+    for (i in 1:nrow(body_regions)) {
+      r <- body_regions[i,]
 
       # Calculate pixel positions
       x_start_px <- round(r$x_start * img_width)
@@ -77,7 +85,7 @@ vis_heatmap_male <- function(data, body_view, colour_palette = "YIOrRd", legend)
       height_px <- y_end_px - y_start_px
 
       # Color based on heat value
-      color_index <- round(r$heat_value * 99) + 1
+      color_index <- round(r$norm_freq * 99) + 1
       color <- adjustcolor(palette_colors[color_index], alpha.f = 0.5)
 
       # Create the rectangle
@@ -90,17 +98,13 @@ vis_heatmap_male <- function(data, body_view, colour_palette = "YIOrRd", legend)
       )
     }
 
+    heatmap_layer_blurred <- image_blur(heatmap_layer, radius = 5, sigma = 3)
+    final_img <- image_composite(body_img, heatmap_layer_blurred, operator = "atop")
+
     # Composite heatmap onto body
-    final_img <- image_composite(body_img, heatmap_layer, operator = "atop")
+  #  final_img <- image_composite(body_img, heatmap_layer, operator = "atop")
 
-    # Show result
     plot(final_img)
-
-# Composite heatmap onto body
-final_img <- image_composite(body_img, heatmap_layer, operator = "atop")
-
-# Show result
-plot(final_img)
 
   } else if (body_view == "back") {
     body <- image_read("/Users/alexandradooley/Desktop/Uni/Year 4/COMP3850/COMP3850-Group-15-R-Package/injvis/Body Images/body_male_back.jpg")
