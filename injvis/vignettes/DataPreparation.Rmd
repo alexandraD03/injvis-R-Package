@@ -1,0 +1,23 @@
+---
+title: "DataPreparation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DataPreparation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(injvis)
+```
+
+# Data Preparation
+
+In order to make the most out of the injvis package, the inputted data should be in the proper format.
