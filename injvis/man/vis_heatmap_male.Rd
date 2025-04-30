@@ -2,7 +2,7 @@
 % Please edit documentation in R/vis_heatmap_male.R
 \name{vis_heatmap_male}
 \alias{vis_heatmap_male}
-\title{Generate a heatmap of the male human body}
+\title{Heatmap of the male human body}
 \usage{
 vis_heatmap_male(data, body_view, low_colour, high_colour, title)
 }

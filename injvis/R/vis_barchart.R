@@ -1,3 +1,13 @@
+#' Barchart of sports injuries per tissue and pathology type
+#' @description
+#' Generate a bar chart to show the frequency of sports injuries per tissue and pathology type.
+#'
+#' @param data Sports injury data, with columns Tissue, Pathology.Type and Frequency
+#'
+#' @return Coloured barchart of sports injury data at tissue and pathology type level
+#' @export
+#'
+#' @examples vis_barchart(injuryTissuePathTable)
 vis_barchart <- function(data) {
   library(ggplot2)
   library(dplyr)

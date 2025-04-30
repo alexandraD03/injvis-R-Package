@@ -1,4 +1,4 @@
-#' Generate a heatmap of the male human body
+#' Heatmap of the male human body
 #'
 #' @description
 #' Generate a heatmap of sports injury data onto a male human body with different anatomical views.
@@ -23,8 +23,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title){
   body_order <- c(
     "Head", "Neck", "Shoulder", "Upper arm", "Elbow", "Forearm", "Wrist", "Hand",
     "Chest", "Thoracic spine", "Lumbosacral", "Abdomen", "Hip/groin", "Thigh",
-    "Knee", "Lower leg", "Ankle", "Foot", "Region unspecified"
-  )
+    "Knee", "Lower leg", "Ankle", "Foot", "Region unspecified")
 
   data <- data %>%
     mutate(Body.area = factor(Body.area, levels = body_order)) %>%
