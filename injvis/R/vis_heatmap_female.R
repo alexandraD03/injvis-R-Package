@@ -1,3 +1,18 @@
+#' Heatmap of the female human body
+#'
+#' @description
+#' Generate a heatmap of sports injury data onto a female human body with different anatomical views.
+#'
+#' @param data Sports injury data, with columns Body.area, Body.region and Frequency
+#' @param body_view Anatomical view of female body (either front, back or side)
+#' @param low_colour Low colour for gradient colouring of heatmap
+#' @param high_colour High colour for gradient colouring of heatmap
+#' @param title Title of heatmap
+#'
+#' @return Frequency heatmap of injury data on a female human body
+#' @export
+#'
+#' @examples vis_heatmap_female(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body")
 vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title){
   library(grid)
   library(png)
