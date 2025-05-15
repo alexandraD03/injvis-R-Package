@@ -2,7 +2,7 @@ Package: injvis
 Type: Package
 Title: Sports Injury Data Visualisation
 Version: 1.0.0
-Author: Alexandra Dooley, Brice Thu, Alexander Brinkman, Joel Mclean, Utsav Chadha, Andisheh Saffarian
+Author: Alexandra Dooley, Brice Thu
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: This package can be used to visualise sports injury data using various visual stimuli such as heatmaps and barcharts. 
 License: MIT + file LICENSE
