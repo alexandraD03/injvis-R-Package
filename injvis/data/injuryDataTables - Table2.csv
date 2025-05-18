@@ -1,0 +1,26 @@
+Tissue,Pathology Type,Frequency
+Muscle/Tendon,Muscle injury,40
+Muscle/Tendon,Muscle contusion,4
+Muscle/Tendon,Muscle compartment syndrome,78
+Muscle/Tendon,Tendinopathy,12
+Muscle/Tendon,Tendon rupture,52
+Nervous,Brain/Spinal cord injury,99
+Nervous,Peripheral nerve injury,54
+Bone,Fracture,79
+Bone,Bone stress injury,28
+Bone,Bone contusion,11
+Bone,Avascular necrosis,3
+Bone,Physis injury,65
+Cartilage/Synovium/Bursa,Cartilage injury,70
+Cartilage/Synovium/Bursa,Arthritis,2
+Cartilage/Synovium/Bursa,Synovitis/Capsulitis,8
+Cartilage/Synovium/Bursa,Burstisis,33
+Ligament/Joint capsule,Joint sprain (ligamint tear or acute instability episode),32
+Ligament/Joint capsule,Chronic instability,50
+Superficial tissues/skin,Contusion (superficial),55
+Superficial tissues/skin,Laceration,24
+Superficial tissues/skin,Abrasion,67
+Vessels,Vascular trauma,69
+Stump,Stump injury,12
+Internal organs,Organ trauma,60
+Non-specific,Injury without tissue type specified,36
