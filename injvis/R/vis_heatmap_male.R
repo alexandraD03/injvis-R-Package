@@ -19,6 +19,8 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title){
   library(ggplot2)
   library(dplyr)
   library(ggforce)
+  library(colorspace)
+  library(paletteer)
 
   # In case data is not in desired order
   body_order <- c(
@@ -99,8 +101,10 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title){
       aes(x0 = x, y0 = y - 0.5, r = radius, fill = Frequency),
       colour = NA, alpha = 0.7
     ) +
+   # scale_color_brewer(palette = colour_palette) +
     scale_fill_gradient(low = low_colour, high = high_colour) +
     coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
     theme_void() +
     ggtitle(title)
 }
+

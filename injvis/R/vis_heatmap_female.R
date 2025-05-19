@@ -18,6 +18,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title){
   library(png)
   library(ggplot2)
   library(dplyr)
+  library(ggforce)
 
   # In case data is not in desired order
   body_order <- c(
@@ -29,6 +30,13 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title){
     mutate(Body.area = factor(Body.area, levels = body_order)) %>%
     arrange(Body.area)
 
+  max_radius <- 0.08
+  min_radius <- 0.02
+
+  # For symmetric body parts
+  symmetric_areas <- c("Hand", "Foot", "Wrist", "Ankle", "Shoulder", "Elbow",
+                       "Knee", "Hip/groin", "Forearm", "Upper arm", "Thigh", "Lower leg")
+
   if(body_view == "front"){
     x <- c(0.4880855, 0.4880855, 0.2910387, 0.2739042, 0.2396352, 0.2182170, 0.1710971,
            0.1282609, 0.4838019, 0.4880855, 0.4880855, 0.4838019, 0.3338750, 0.3767112,
@@ -37,41 +45,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title){
     y <- c(1.82496679, 1.62791995, 1.54653104, 1.39232046, 1.28951342, 1.19527362, 1.07533206,
            0.98109227, 1.50797839, 1.34948419, 1.10103383, 1.22954264, 1.07961569, 0.88256885,
            0.60413309, 0.40708625, 0.18862127, 0.09009785, 1.78213052)
-
-
-    body_coords <- data.frame(Body.area = data$Body.area, x, y
-                              #size()
-    )
-
-    # Merge frequencies with coordinates
-    plot_data <- data %>%
-      left_join(body_coords, by = "Body.area")
-
-    # For symmetric body parts
-    symmetric_areas <- c("Hand", "Foot", "Wrist", "Ankle", "Shoulder", "Elbow",
-                         "Knee", "Hip/groin", "Forearm", "Upper arm", "Thigh", "Lower leg")
-
-    left_side <- plot_data %>%
-      filter(Body.area %in% symmetric_areas)
-
-    right_side <- left_side %>%
-      mutate(x = 0.99 - x)
-
-    plot_data_doubled <- bind_rows(plot_data, right_side)
-
-    # Load body image
-    body <- readPNG("Body Images/body_female_front_background_removed.png")
-    g <- rasterGrob(body, width=unit(1,"npc"), height=unit(2,"npc"))
-
-    # Plot
-    ggplot(plot_data_doubled, aes(x, y-0.5)) +
-      annotation_custom(g, xmin=0, xmax=1, ymin=0, ymax=1) +
-      geom_point(aes(size = Frequency, color = Frequency), alpha = 0.7) +
-      scale_color_gradient(low = low_colour, high = high_colour) +
-      scale_size(range = c(5, 15)) +
-      coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
-      theme_void() +
-      ggtitle(title)
+    img_path <- "Body Images/body_female_front_background_removed.png"
 
   } else if (body_view == "back") {
     x <- c(0.5009364, 0.5009364, 0.3552931, 0.2781878, 0.2567697, 0.2139334, 0.1882316,
@@ -81,38 +55,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title){
     y <- c(1.8421013, 1.6493381, 1.5679492, 1.4351567, 1.2809462, 1.1909900, 1.0753321,
            0.9639578, 1.5465310, 1.4265895, 1.1652882, 1.2937970, 1.1395865, 0.8825688,
            0.6341185, 0.4156535, 0.1929049, 0.1029487, 1.7864142)
-
-    body_coords <- data.frame(Body.area = data$Body.area, x, y)
-
-    # Merge frequencies with coordinates
-    plot_data <- data %>%
-      left_join(body_coords, by = "Body.area")
-
-    # For symmetric body parts
-    symmetric_areas <- c("Hand", "Foot", "Wrist", "Ankle", "Shoulder", "Elbow",
-                         "Knee", "Hip/groin", "Forearm", "Upper arm", "Thigh", "Lower leg")
-
-    left_side <- plot_data %>%
-      filter(Body.area %in% symmetric_areas)
-
-    right_side <- left_side %>%
-      mutate(x = 0.99 - x)
-
-    plot_data_doubled <- bind_rows(plot_data, right_side)
-
-    # Load body image
-    body <- readPNG("Body Images/body_female_back_background_removed.png")
-    g <- rasterGrob(body, width=unit(1,"npc"), height=unit(2,"npc"))
-
-    # Plot
-    ggplot(plot_data_doubled, aes(x, y-0.5)) +
-      annotation_custom(g, xmin=0, xmax=1, ymin=0, ymax=1) +
-      geom_point(aes(size = Frequency, color = Frequency), alpha = 0.7) +
-      scale_color_gradient(low = low_colour, high = high_colour) +
-      scale_size(range = c(5, 15)) +
-      coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
-      theme_void() +
-      ggtitle(title)
+    img_path <- "Body Images/body_female_back_background_removed.png"
 
   } else if (body_view == "side") {
     x <- c(0.4238311, 0.4495329, 0.4109803, 0.4709510, 0.4752347, 0.6080271, 0.6851324,
@@ -122,26 +65,41 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title){
     y <- c(1.88493757, 1.67075622, 1.53796378, 1.40945497, 1.29379704, 1.18670637, 1.07533206,
            0.98109227, 1.45657487, 1.37518596, 1.19527362, 1.25096077, 0.98109227, 0.83544895,
            0.59556584, 0.38566811, 0.18005402, 0.09009785, 1.99631187)
-    body_coords <- data.frame(Body.area = data$Body.area, x, y)
-
-    # Merge frequencies with coordinates
-    plot_data <- data %>%
-      left_join(body_coords, by = "Body.area")
-
-    body <- readPNG("Body Images/body_female_side_background_removed.png")
-    g <- rasterGrob(body, width=unit(1,"npc"), height=unit(2,"npc"))
-
-    # Plot
-    ggplot(plot_data, aes(x, y-0.5)) +
-      annotation_custom(g, xmin=0, xmax=1, ymin=0, ymax=1) +
-      geom_point(aes(size = Frequency, color = Frequency), alpha = 0.7) +
-      scale_color_gradient(low = low_colour, high = high_colour) +
-      scale_size(range = c(5, 15)) +
-      coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
-      theme_void() +
-      ggtitle(title)
+    img_path <- "Body Images/body_female_side_background_removed.png"
 
   } else {
     print("Please choose an appropriate body view (either front, back or side)")
   }
+
+  body_coords <- data.frame(Body.area = data$Body.area, x, y)
+
+  # Merge frequencies with coordinates
+  plot_data <- data %>%
+    left_join(body_coords, by = "Body.area")
+
+  if (body_view %in% c("front", "back")) {
+    plot_data <- bind_rows(
+      plot_data,
+      filter(plot_data, Body.area %in% symmetric_areas) %>%
+        mutate(x = 0.99 - x)
+    )
+  }
+
+  plot_data <- plot_data %>%
+    mutate(radius = pmax (sqrt(Frequency / max(Frequency)) * max_radius, min_radius))
+
+  body_img <- readPNG(img_path)
+  body_grob <- rasterGrob(body_img, width = unit(1, "npc"), height = unit(2, "npc"))
+
+  ggplot() +
+    annotation_custom(body_grob, xmin = 0, xmax = 1, ymin = 0, ymax = 1) +
+    geom_circle(
+      data = plot_data,
+      aes(x0 = x, y0 = y - 0.5, r = radius, fill = Frequency),
+      colour = NA, alpha = 0.7
+    ) +
+    scale_fill_gradient(low = low_colour, high = high_colour) +
+    coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
+    theme_void() +
+    ggtitle(title)
 }
