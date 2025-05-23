@@ -4,7 +4,15 @@
 \alias{vis_heatmap_male}
 \title{Heatmap of the male human body}
 \usage{
-vis_heatmap_male(data, body_view, low_colour, high_colour, title)
+vis_heatmap_male(
+  data,
+  body_view,
+  low_colour,
+  high_colour,
+  title,
+  body_region = FALSE,
+  unspecified = TRUE
+)
 }
 \arguments{
 \item{data}{Sports injury data, with columns Body.area, Body.region and Frequency}
@@ -16,6 +24,10 @@ vis_heatmap_male(data, body_view, low_colour, high_colour, title)
 \item{high_colour}{High colour for gradient colouring of heatmap}
 
 \item{title}{Title of heatmap}
+
+\item{body_region}{Boolean variable indicating whether to display the data by body region. Default is to display data by body area and is FALSE}
+
+\item{unspecified}{Boolean variable which indicates whether to include data with unspecified body area/region. Default is TRUE}
 }
 \value{
 Frequency heatmap of injury data on a male human body

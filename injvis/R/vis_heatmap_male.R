@@ -8,6 +8,8 @@
 #' @param low_colour Low colour for gradient colouring of heatmap
 #' @param high_colour High colour for gradient colouring of heatmap
 #' @param title Title of heatmap
+#' @param body_region Boolean variable indicating whether to display the data by body region. Default is to display data by body area and is FALSE
+#' @param unspecified Boolean variable which indicates whether to include data with unspecified body area/region. Default is TRUE
 #'
 #' @return Frequency heatmap of injury data on a male human body
 #' @export

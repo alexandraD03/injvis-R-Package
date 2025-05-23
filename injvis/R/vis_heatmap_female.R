@@ -9,6 +9,7 @@
 #' @param high_colour High colour for gradient colouring of heatmap
 #' @param title Title of heatmap
 #'
+#'
 #' @return Frequency heatmap of injury data on a female human body
 #' @export
 #'
