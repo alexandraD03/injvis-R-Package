@@ -16,6 +16,8 @@ vis_heatmap_female(data, body_view, low_colour, high_colour, title)
 \item{high_colour}{High colour for gradient colouring of heatmap}
 
 \item{title}{Title of heatmap}
+
+\item{body_region}{Boolean variable indicating whether to display the data by body region. Default is to display data by body area and is FALSE}
 }
 \value{
 Frequency heatmap of injury data on a female human body

@@ -10,8 +10,7 @@ vis_heatmap_male(
   low_colour,
   high_colour,
   title,
-  body_region = FALSE,
-  unspecified = TRUE
+  body_region = FALSE
 )
 }
 \arguments{
@@ -26,8 +25,6 @@ vis_heatmap_male(
 \item{title}{Title of heatmap}
 
 \item{body_region}{Boolean variable indicating whether to display the data by body region. Default is to display data by body area and is FALSE}
-
-\item{unspecified}{Boolean variable which indicates whether to include data with unspecified body area/region. Default is TRUE}
 }
 \value{
 Frequency heatmap of injury data on a male human body

@@ -9,13 +9,12 @@
 #' @param high_colour High colour for gradient colouring of heatmap
 #' @param title Title of heatmap
 #' @param body_region Boolean variable indicating whether to display the data by body region. Default is to display data by body area and is FALSE
-#' @param unspecified Boolean variable which indicates whether to include data with unspecified body area/region. Default is TRUE
 #'
 #' @return Frequency heatmap of injury data on a male human body
 #' @export
 #'
 #' @examples vis_heatmap_male(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body")
-vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, body_region=FALSE, unspecified = TRUE){
+vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, body_region=FALSE, show_labels = FALSE, include_unspecified = TRUE){
   library(grid)
   library(png)
   library(ggplot2)
@@ -48,7 +47,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
              0.4229992, 0.4229992, 0.4395444, 0.4130720, 0.1814385)
 
       y <- c(1.8209676, 1.6488970, 1.5893341, 1.3907911, 1.2815924, 1.1790119, 1.0598861,
-             0.9539965, 1.5264621, 1.3146829, 1.0764314, 1.2319567, 1.0135594, 0.8183255,
+             0.9539965, 1.5264621, 1.3146829+0.1, 1.0764314, 1.2319567, 1.0135594, 0.8183255,
              0.6528730, 0.4642571, 0.2557870, 0.1532064, 1.8242766)
       img_path <- "Body Images/body_male_front_background_removed.png"
 
@@ -94,6 +93,10 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     plot_data <- plot_data %>%
       mutate(radius = pmax (sqrt(Frequency / max(Frequency)) * max_radius, min_radius))
 
+    if (!include_unspecified) {
+      plot_data <- plot_data %>% filter(Body.area != "Region unspecified")
+    }
+
     body_img <- readPNG(img_path)
     body_grob <- rasterGrob(body_img, width = unit(1, "npc"), height = unit(2, "npc"))
 
@@ -108,7 +111,15 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
       scale_fill_gradient(low = low_colour, high = high_colour) +
       coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
       theme_void() +
-      ggtitle(title)
+      ggtitle(title) +
+      if (show_labels) {
+        geom_text(
+          data = plot_data,
+          aes(x = x, y = y - 0.6, label = paste0(Body.area, "\n", Frequency)),
+          size = 3, vjust = -1, color = "black"
+        )
+      }
+
   } else if (body_region == TRUE){
     # In case data is not in desired order
     body_order <- c("Head and neck", "Upper limb", "Trunk",
@@ -164,6 +175,10 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     plot_data <- plot_data %>%
       mutate(radius = pmax (sqrt(Frequency / max(Frequency)) * max_radius, min_radius))
 
+    if (!include_unspecified) {
+      plot_data <- plot_data %>% filter(Body.region != "Unspecified")
+    }
+
     body_img <- readPNG(img_path)
     body_grob <- rasterGrob(body_img, width = unit(1, "npc"), height = unit(2, "npc"))
 
@@ -178,6 +193,13 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
       scale_fill_gradient(low = low_colour, high = high_colour) +
       coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
       theme_void() +
-      ggtitle(title)
+      ggtitle(title) +
+      if (show_labels) {
+        geom_text(
+          data = plot_data,
+          aes(x = x, y = y - 0.5, label = Body.region),
+          size = 3, vjust = -1, color = "black"
+        )
+      }
   }
 }

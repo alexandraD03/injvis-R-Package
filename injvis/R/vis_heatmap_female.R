@@ -8,6 +8,7 @@
 #' @param low_colour Low colour for gradient colouring of heatmap
 #' @param high_colour High colour for gradient colouring of heatmap
 #' @param title Title of heatmap
+#' @param body_region Boolean variable indicating whether to display the data by body region. Default is to display data by body area and is FALSE
 #'
 #'
 #' @return Frequency heatmap of injury data on a female human body
@@ -65,7 +66,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title){
 
     y <- c(1.88493757, 1.67075622, 1.53796378, 1.40945497, 1.29379704, 1.18670637, 1.07533206,
            0.98109227, 1.45657487, 1.37518596, 1.19527362, 1.25096077, 0.98109227, 0.83544895,
-           0.59556584, 0.38566811, 0.18005402, 0.09009785, 1.99631187)
+           0.59556584, 0.38566811, 0.18005402, 0.09009785, 1.88)
     img_path <- "Body Images/body_female_side_background_removed.png"
 
   } else {
@@ -102,5 +103,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title){
     scale_fill_gradient(low = low_colour, high = high_colour) +
     coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
     theme_void() +
-    ggtitle(title)
+    ggtitle(title) +
+    theme(plot.title = element_text(size = 20))
+
 }
