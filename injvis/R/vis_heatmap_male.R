@@ -9,11 +9,14 @@
 #' @param high_colour High colour for gradient colouring of heatmap
 #' @param title Title of heatmap
 #' @param body_region Boolean variable indicating whether to display the data by body region. Default is to display data by body area and is FALSE
+#' @param show_labels Boolean variable indicating whether to display labels and frequency count for each body area/region
+#' @param include_unspecified Boolean variable indicating whether to include frequency data with unspecified body area/region
+#' @param colourblind_friendly Boolean variable indicating whether to use a colourblind friendly colour palette for heatmap gradient
 #'
 #' @return Frequency heatmap of injury data on a male human body
 #' @export
 #'
-#' @examples vis_heatmap_male(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body")
+#' @examples vis_heatmap_male(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body", body_region = FALSE, show_labels = TRUE, include_unspecified = TRUE)
 vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, body_region=FALSE, show_labels = FALSE, include_unspecified = TRUE, colourblind_friendly = FALSE){
   library(grid)
   library(png)

@@ -4,7 +4,17 @@
 \alias{vis_heatmap_female}
 \title{Heatmap of the female human body}
 \usage{
-vis_heatmap_female(data, body_view, low_colour, high_colour, title)
+vis_heatmap_female(
+  data,
+  body_view,
+  low_colour,
+  high_colour,
+  title,
+  body_region = FALSE,
+  show_labels = FALSE,
+  include_unspecified = TRUE,
+  colourblind_friendly = FALSE
+)
 }
 \arguments{
 \item{data}{Sports injury data, with columns Body.area, Body.region and Frequency}
@@ -18,6 +28,12 @@ vis_heatmap_female(data, body_view, low_colour, high_colour, title)
 \item{title}{Title of heatmap}
 
 \item{body_region}{Boolean variable indicating whether to display the data by body region. Default is to display data by body area and is FALSE}
+
+\item{show_labels}{Boolean variable indicating whether to display labels and frequency count for each body area/region}
+
+\item{include_unspecified}{Boolean variable indicating whether to include frequency data with unspecified body area/region}
+
+\item{colourblind_friendly}{Boolean variable indicating whether to use a colourblind friendly colour palette for heatmap gradient}
 }
 \value{
 Frequency heatmap of injury data on a female human body
@@ -26,5 +42,5 @@ Frequency heatmap of injury data on a female human body
 Generate a heatmap of sports injury data onto a female human body with different anatomical views.
 }
 \examples{
-vis_heatmap_female(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body")
+vis_heatmap_female(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body", body_region = FALSE, show_labels = TRUE, include_unspecified = TRUE)
 }
