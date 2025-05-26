@@ -14,14 +14,13 @@
 #' @export
 #'
 #' @examples vis_heatmap_male(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body")
-vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, body_region=FALSE, show_labels = FALSE, include_unspecified = TRUE){
+vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, body_region=FALSE, show_labels = FALSE, include_unspecified = TRUE, colourblind_friendly = FALSE){
   library(grid)
   library(png)
   library(ggplot2)
   library(dplyr)
   library(ggforce)
-  library(colorspace)
-  library(paletteer)
+  library(viridis)
 
   if(body_region==FALSE){
     # In case data is not in desired order
@@ -100,25 +99,32 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     body_img <- readPNG(img_path)
     body_grob <- rasterGrob(body_img, width = unit(1, "npc"), height = unit(2, "npc"))
 
-    ggplot() +
+   p<- ggplot() +
       annotation_custom(body_grob, xmin = 0, xmax = 1, ymin = 0, ymax = 1) +
       geom_circle(
         data = plot_data,
         aes(x0 = x, y0 = y - 0.5, r = radius, fill = Frequency),
         colour = NA, alpha = 0.7
       ) +
-     # scale_color_brewer(palette = colour_palette) +
-      scale_fill_gradient(low = low_colour, high = high_colour) +
+      #scale_fill_gradient(low = low_colour, high = high_colour) +
       coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
       theme_void() +
-      ggtitle(title) +
+      ggtitle(title)
+
+      if(colourblind_friendly==TRUE){
+        p <- p+ scale_fill_viridis(option = "cividis", begin = 0.1, end = 0.9)
+      } else {
+        p <- p+ scale_fill_gradient(low = low_colour, high = high_colour)
+      }
+
       if (show_labels) {
-        geom_text(
+        p <- p+ geom_text(
           data = plot_data,
           aes(x = x, y = y - 0.6, label = paste0(Body.area, "\n", Frequency)),
           size = 3, vjust = -1, color = "black"
         )
       }
+   p
 
   } else if (body_region == TRUE){
     # In case data is not in desired order
@@ -128,6 +134,10 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     #data <- #data %>%
      # mutate(Body.region = factor(Body.region, levels = body_order)) %>%
     data <- aggregate(Frequency ~ Body.region, data = data, sum) %>%
+      arrange(Body.region)
+
+    data <- data %>%
+      mutate(Body.region = factor(Body.region, levels = body_order)) %>%
       arrange(Body.region)
     #%>%
     #  arrange(Body.region)
@@ -182,24 +192,34 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     body_img <- readPNG(img_path)
     body_grob <- rasterGrob(body_img, width = unit(1, "npc"), height = unit(2, "npc"))
 
-    ggplot() +
+    p <- ggplot() +
       annotation_custom(body_grob, xmin = 0, xmax = 1, ymin = 0, ymax = 1) +
       geom_circle(
         data = plot_data,
         aes(x0 = x, y0 = y - 0.5, r = radius, fill = Frequency),
         colour = NA, alpha = 0.7
       ) +
+   #   scale_fill_gradient(low = low_colour, high = high_colour) +
       # scale_color_brewer(palette = colour_palette) +
-      scale_fill_gradient(low = low_colour, high = high_colour) +
+     # scale_fill_gradient(low = low_colour, high = high_colour) +
       coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
       theme_void() +
-      ggtitle(title) +
+      ggtitle(title)
+
+      if(colourblind_friendly==TRUE){
+        p <- p + scale_fill_viridis(option = "cividis", begin = 0.1, end = 0.9)
+      } else {
+        p <- p + scale_fill_gradient(low = low_colour, high = high_colour)
+      }
+
       if (show_labels) {
-        geom_text(
+        p <- p + geom_text(
           data = plot_data,
-          aes(x = x, y = y - 0.5, label = Body.region),
+          aes(x = x, y = y - 0.6, label = paste0(Body.region, "\n", Frequency)),
           size = 3, vjust = -1, color = "black"
         )
       }
+    p
   }
 }
+
