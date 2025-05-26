@@ -109,7 +109,8 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
       #scale_fill_gradient(low = low_colour, high = high_colour) +
       coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
       theme_void() +
-      ggtitle(title)
+      ggtitle(title) +
+     theme(plot.title = element_text(size = 20))
 
       if(colourblind_friendly==TRUE){
         p <- p+ scale_fill_viridis(option = "cividis", begin = 0.1, end = 0.9)
@@ -204,7 +205,8 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
      # scale_fill_gradient(low = low_colour, high = high_colour) +
       coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
       theme_void() +
-      ggtitle(title)
+      ggtitle(title)+
+      theme(plot.title = element_text(size = 20))
 
       if(colourblind_friendly==TRUE){
         p <- p + scale_fill_viridis(option = "cividis", begin = 0.1, end = 0.9)
