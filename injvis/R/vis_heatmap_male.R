@@ -12,12 +12,15 @@
 #' @param show_labels Boolean variable indicating whether to display labels and frequency count for each body area/region
 #' @param include_unspecified Boolean variable indicating whether to include frequency data with unspecified body area/region
 #' @param colourblind_friendly Boolean variable indicating whether to use a colourblind friendly colour palette for heatmap gradient
+#' @param colourOption  Option to choose which colourblind friendly palette from the package viridis, either "A", "B", "C", "E", "F", "G" or "H" (Default is "E")
 #'
 #' @return Frequency heatmap of injury data on a male human body
 #' @export
 #'
 #' @examples vis_heatmap_male(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body", body_region = FALSE, show_labels = TRUE, include_unspecified = TRUE)
-vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, body_region=FALSE, show_labels = FALSE, include_unspecified = TRUE, colourblind_friendly = FALSE){
+#' vis_heatmap_male(injuryDataTable, "back", "blue", "green", "Heat Map of Back Body", body_region = TRUE)
+#' vis_heatmap_male(injuryDataTable, "side", "yellow", "red", "Heat Map of Side Body", include_unspecified = FALSE)
+vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, body_region=FALSE, show_labels = FALSE, include_unspecified = TRUE, colourblind_friendly = FALSE, colourOption = "E"){
   library(grid)
   library(png)
   library(ggplot2)
@@ -116,7 +119,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
      theme(plot.title = element_text(size = 20))
 
       if(colourblind_friendly==TRUE){
-        p <- p+ scale_fill_viridis(option = "cividis", begin = 0.1, end = 0.9)
+        p <- p+ scale_fill_viridis(option = colourOption, begin = 0.1, end = 0.9)
       } else {
         p <- p+ scale_fill_gradient(low = low_colour, high = high_colour)
       }
@@ -212,7 +215,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
       theme(plot.title = element_text(size = 20))
 
       if(colourblind_friendly==TRUE){
-        p <- p + scale_fill_viridis(option = "cividis", begin = 0.1, end = 0.9)
+        p <- p + scale_fill_viridis(option = colourOption, begin = 0.1, end = 0.9)
       } else {
         p <- p + scale_fill_gradient(low = low_colour, high = high_colour)
       }

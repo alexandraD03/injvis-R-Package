@@ -13,7 +13,8 @@ vis_heatmap_female(
   body_region = FALSE,
   show_labels = FALSE,
   include_unspecified = TRUE,
-  colourblind_friendly = FALSE
+  colourblind_friendly = FALSE,
+  colourOption = "E"
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ vis_heatmap_female(
 \item{include_unspecified}{Boolean variable indicating whether to include frequency data with unspecified body area/region}
 
 \item{colourblind_friendly}{Boolean variable indicating whether to use a colourblind friendly colour palette for heatmap gradient}
+
+\item{colourOption}{Option to choose which colourblind friendly palette from the package viridis, either "A", "B", "C", "E", "F", "G" or "H" (Default is "E")}
 }
 \value{
 Frequency heatmap of injury data on a female human body
@@ -43,4 +46,6 @@ Generate a heatmap of sports injury data onto a female human body with different
 }
 \examples{
 vis_heatmap_female(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body", body_region = FALSE, show_labels = TRUE, include_unspecified = TRUE)
+vis_heatmap_female(injuryDataTable, "back", "blue", "green", "Heat Map of Back Body", body_region = TRUE)
+vis_heatmap_female(injuryDataTable, "side", "yellow", "red", "Heat Map of Side Body", include_unspecified = FALSE)
 }
