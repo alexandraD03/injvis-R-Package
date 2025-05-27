@@ -3,7 +3,7 @@
 #' Generate a bar chart to show the frequency of sports injuries per tissue and pathology type.
 #'
 #' @param data Sports injury data, with columns Tissue, Pathology.Type and Frequency
-#' @param colurblond description
+#' @param colourblind description
 #' @param colourOption description
 #'
 #' @return Coloured barchart of sports injury data at tissue and pathology type level
