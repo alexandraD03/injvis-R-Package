@@ -4,7 +4,7 @@
 #' Generate a heatmap of sports injury data onto a female human body with different anatomical views.
 #'
 #' @param data Sports injury data, with columns Body.area, Body.region and Frequency
-#' @param body_view Anatomical view of female body (either front, back or side)
+#' @param body_view Anatomical view of female body (either front/anterior, back/posterior or side/lateral)
 #' @param low_colour Low colour for gradient colouring of heatmap
 #' @param high_colour High colour for gradient colouring of heatmap
 #' @param title Title of heatmap
@@ -47,7 +47,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
     symmetric_areas <- c("Hand", "Foot", "Wrist", "Ankle", "Shoulder", "Elbow",
                          "Knee", "Hip/groin", "Forearm", "Upper arm", "Thigh", "Lower leg")
 
-    if(body_view == "front"){
+    if(body_view == "front" || body_view == "anterior"){
       x <- c(0.4880855, 0.4880855, 0.2910387, 0.2739042, 0.2396352, 0.2182170, 0.1710971,
              0.1282609, 0.4838019, 0.4880855, 0.4880855, 0.4838019, 0.3338750, 0.3767112,
              0.4152639, 0.4152639, 0.4366820, 0.4238311, 0.1882316)
@@ -57,7 +57,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
              0.60413309, 0.40708625, 0.18862127, 0.09009785, 1.78213052)
       img_path <- "Body Images/body_female_front_background_removed.png"
 
-    } else if (body_view == "back") {
+    } else if (body_view == "back"|| body_view == "posterior") {
       x <- c(0.5009364, 0.5009364, 0.3552931, 0.2781878, 0.2567697, 0.2139334, 0.1882316,
              0.1282609, 0.5009364, 0.5009364, 0.4966528, 0.4966528, 0.3338750, 0.3895621,
              0.4109803, 0.4238311, 0.4452493, 0.4109803, 0.2096498)
@@ -67,7 +67,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
              0.6341185, 0.4156535, 0.1929049, 0.1029487, 1.7864142)
       img_path <- "Body Images/body_female_back_background_removed.png"
 
-    } else if (body_view == "side") {
+    } else if (body_view == "side" || body_view == "lateral") {
       x <- c(0.4238311, 0.4495329, 0.4109803, 0.4709510, 0.4752347, 0.6080271, 0.6851324,
              0.7622377, 0.6165944, 0.3638604, 0.3809949, 0.6722815, 0.4623838, 0.5480563,
              0.5052200, 0.4452493, 0.4195475, 0.5352054, 0.1154100)
@@ -78,7 +78,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
       img_path <- "Body Images/body_female_side_background_removed.png"
 
     } else {
-      print("Please choose an appropriate body view (either front, back or side)")
+      print("Please choose an appropriate body view (either front/anterior, back/posterior or side/lateral)")
     }
 
     body_coords <- data.frame(Body.area = data$Body.area, x, y)

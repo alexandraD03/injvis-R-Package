@@ -20,7 +20,7 @@ vis_heatmap_female(
 \arguments{
 \item{data}{Sports injury data, with columns Body.area, Body.region and Frequency}
 
-\item{body_view}{Anatomical view of female body (either front, back or side)}
+\item{body_view}{Anatomical view of female body (either front/anterior, back/posterior or side/lateral)}
 
 \item{low_colour}{Low colour for gradient colouring of heatmap}
 
