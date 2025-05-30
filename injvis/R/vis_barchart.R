@@ -14,10 +14,31 @@
 #' vis_barchart(injuryTissuePathTable, colourblind = TRUE)
 #' vis_barchart(injuryTissuePathTable, colourblind = TRUE, colourOption = "D")
 #'
-vis_barchart <- function(data, colourblind_friendly = FALSE, colourOption = "A") {
+vis_barchart <- function(data, colourblind_friendly = FALSE, colourOption = "A", tissue_view = FALSE) {
   library(ggplot2)
   library(dplyr)
   library(viridis)
+
+  if (tissue_view) {
+    data_summary <- data %>%
+      group_by(Tissue) %>%
+      summarise(Frequency = sum(Frequency)) %>%
+      mutate(Tissue = factor(Tissue, levels = Tissue))
+
+    barchart <- ggplot(data_summary, aes(x = Tissue, y = Frequency, fill = Tissue)) +
+      geom_col() +
+      labs(x = "Tissue Type", y = "Total Frequency") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1),
+            legend.position = "none") +
+      scale_y_continuous(breaks = seq(0, max(data_summary$Frequency), by = 10))
+
+    if (colourblind_friendly) {
+      barchart <- barchart + scale_fill_viridis_d(option = colourOption)
+    }
+
+    return(barchart)
+  }
 
   data <- data %>%
     mutate(Tissue = factor(Tissue,
@@ -37,5 +58,5 @@ vis_barchart <- function(data, colourblind_friendly = FALSE, colourOption = "A")
     barchart <- barchart + scale_fill_viridis_d(option = colourOption)
   }
 
-  barchart
+  return(barchart)
 }
