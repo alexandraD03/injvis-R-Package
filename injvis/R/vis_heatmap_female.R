@@ -73,7 +73,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
 
       y <- c(1.88493757, 1.67075622, 1.53796378, 1.40945497, 1.29379704, 1.18670637, 1.07533206,
              0.98109227, 1.45657487, 1.37518596, 1.19527362, 1.25096077, 0.98109227, 0.83544895,
-             0.59556584, 0.38566811, 0.18005402, 0.09009785, 1.88)
+             0.59556584, 0.38566811, 0.18005402, 0.09009785, 1.88+0.05)
       img_path <- "Body Images/body_female_side_background_removed.png"
 
     } else {
@@ -142,7 +142,98 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
     p
 
   } else if (body_region == TRUE) {
+    # In case data is not in desired order
+    body_order <- c("Head and neck", "Upper limb", "Trunk",
+                    "Lower limb", "Unspecified")
 
+    #data <- #data %>%
+    # mutate(Body.region = factor(Body.region, levels = body_order)) %>%
+    data <- aggregate(Frequency ~ Body.region, data = data, sum) %>%
+      arrange(Body.region)
+
+    data <- data %>%
+      mutate(Body.region = factor(Body.region, levels = body_order)) %>%
+      arrange(Body.region)
+    #%>%
+    #  arrange(Body.region)
+
+    max_radius <- 0.04
+
+    # For symmetric body parts
+    # symmetric_areas <- c("Head and neck", "Upper limb", "Trunk",
+    #                      "Lower limb", "Unspecified")
+
+    if(body_view == "front" || body_view== "anterior"){
+      x <- c(0.4848212, 0.4848212, 0.4848212, 0.4848212, 0.1552725)
+      y <- c(1.8132487, 1.5432018, 1.2685779, 0.8383338, 1.8727505)
+      img_path <- "Body Images/body_female_front_background_removed.png"
+
+    } else if (body_view == "back" || body_view == "posterior") {
+      x <- c(0.4985524, 0.4939753, 0.4939753, 0.4939753, 0.1598496)
+      y <- c(1.7766321, 1.5752413, 1.2868862, 0.8703733, 1.8681734)
+      img_path <- "Body Images/body_female_back_background_removed.png"
+
+    } else if (body_view == "side" || body_view == "lateral") {
+      x <- c(0.4710900, 0.4436276, 0.4482047, 0.4848212, 0.1095018)
+      y <- c(1.8269798, 1.4882770, 1.1861907, 0.7467925, 2.0146395 - 0.09)
+      img_path <- "Body Images/body_female_side_background_removed.png"
+
+    } else {
+      print("Please choose an appropriate body view (either front/anterior, back/posterior or side/lateral)")
+    }
+
+    body_coords <- data.frame(Body.region = data$Body.region, x, y)
+
+    # Merge frequencies with coordinates
+    plot_data <- data %>%
+      left_join(body_coords, by = "Body.region")
+    #
+    #     if (body_view %in% c("front", "back")) {
+    #       plot_data <- bind_rows(
+    #         plot_data,
+    #         filter(plot_data, Body.region %in% symmetric_areas) %>%
+    #           mutate(x = 0.99 - x)
+    #       )
+    #     }
+
+    plot_data <- plot_data %>%
+      mutate(radius = max_radius)
+
+    if (!include_unspecified) {
+      plot_data <- plot_data %>% filter(Body.region != "Unspecified")
+    }
+
+    body_img <- readPNG(img_path)
+    body_grob <- rasterGrob(body_img, width = unit(1, "npc"), height = unit(2, "npc"))
+
+    p <- ggplot() +
+      annotation_custom(body_grob, xmin = 0, xmax = 1, ymin = 0, ymax = 1) +
+      geom_circle(
+        data = plot_data,
+        aes(x0 = x, y0 = y - 0.5, r = radius, fill = Frequency),
+        colour = NA, alpha = 0.7
+      ) +
+      #   scale_fill_gradient(low = low_colour, high = high_colour) +
+      # scale_color_brewer(palette = colour_palette) +
+      # scale_fill_gradient(low = low_colour, high = high_colour) +
+      coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
+      theme_void() +
+      ggtitle(title)+
+      theme(plot.title = element_text(size = 20))
+
+    if(colourblind_friendly==TRUE){
+      p <- p + scale_fill_viridis(option = colourOption, begin = 0.1, end = 0.9)
+    } else {
+      p <- p + scale_fill_gradient(low = low_colour, high = high_colour)
+    }
+
+    if (show_labels) {
+      p <- p + geom_text(
+        data = plot_data,
+        aes(x = x, y = y - 0.6, label = paste0(Body.region, "\n", Frequency)),
+        size = 3, vjust = -1, color = "black"
+      )
+    }
+    p
   }
-
 }

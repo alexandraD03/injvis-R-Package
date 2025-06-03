@@ -40,6 +40,9 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
       arrange(Body.area)
 
     max_radius <- 0.04
+    #max_radius <- c(0.06, 0.04, 0.05, 0.04, 0.04, 0.04, 0.04, 0.04, 0.06,
+           #    0.04, 0.04, 0.055, 0.045, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04)
+
 
     # For symmetric body parts
     symmetric_areas <- c("Hand", "Foot", "Wrist", "Ankle", "Shoulder", "Elbow",
@@ -95,7 +98,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     }
 
     plot_data <- plot_data %>%
-      mutate(radius = max_radius)
+    mutate(radius = max_radius)
 
     if (!include_unspecified) {
       plot_data <- plot_data %>% filter(Body.area != "Region unspecified")
