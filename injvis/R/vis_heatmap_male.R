@@ -39,8 +39,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
       mutate(Body.area = factor(Body.area, levels = body_order)) %>%
       arrange(Body.area)
 
-    max_radius <- 0.08
-    min_radius <- 0.02
+    max_radius <- 0.04
 
     # For symmetric body parts
     symmetric_areas <- c("Hand", "Foot", "Wrist", "Ankle", "Shoulder", "Elbow",
@@ -87,7 +86,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     plot_data <- data %>%
       left_join(body_coords, by = "Body.area")
 
-    if (body_view %in% c("front", "back")) {
+    if (body_view %in% c("front", "anterior", "back", "posterior")) {
       plot_data <- bind_rows(
         plot_data,
         filter(plot_data, Body.area %in% symmetric_areas) %>%
@@ -96,7 +95,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     }
 
     plot_data <- plot_data %>%
-      mutate(radius = pmax (sqrt(Frequency / max(Frequency)) * max_radius, min_radius))
+      mutate(radius = max_radius)
 
     if (!include_unspecified) {
       plot_data <- plot_data %>% filter(Body.area != "Region unspecified")
@@ -149,8 +148,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     #%>%
     #  arrange(Body.region)
 
-    max_radius <- 0.08
-    min_radius <- 0.02
+    max_radius <- 0.04
 
     # For symmetric body parts
     # symmetric_areas <- c("Head and neck", "Upper limb", "Trunk",
@@ -190,7 +188,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
 #     }
 
     plot_data <- plot_data %>%
-      mutate(radius = pmax (sqrt(Frequency / max(Frequency)) * max_radius, min_radius))
+      mutate(radius = max_radius)
 
     if (!include_unspecified) {
       plot_data <- plot_data %>% filter(Body.region != "Unspecified")
