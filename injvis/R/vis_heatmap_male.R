@@ -32,8 +32,8 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     # In case data is not in desired order
     body_order <- c(
       "Head", "Neck", "Shoulder", "Upper arm", "Elbow", "Forearm", "Wrist", "Hand",
-      "Chest", "Thoracic spine", "Lumbosacral", "Abdomen", "Hip/groin", "Thigh",
-      "Knee", "Lower leg", "Ankle", "Foot", "Region unspecified")
+      "Chest", "Thoracic spine", "Lumbosacral", "Abdomen", "Hip and groin", "Thigh",
+      "Knee", "Lower leg", "Ankle", "Foot", "Unspecified")
 
     data <- data %>%
       mutate(Body.area = factor(Body.area, levels = body_order)) %>%
@@ -46,7 +46,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
 
     # For symmetric body parts
     symmetric_areas <- c("Hand", "Foot", "Wrist", "Ankle", "Shoulder", "Elbow",
-                         "Knee", "Hip/groin", "Forearm", "Upper arm", "Thigh", "Lower leg")
+                         "Knee", "Hip and groin", "Forearm", "Upper arm", "Thigh", "Lower leg")
 
     if(body_view == "front" || body_view == "anterior"){
       x <- c(0.4891802, 0.4891802, 0.3502001, 0.2807100, 0.2774010, 0.2376924, 0.1913657,
@@ -54,13 +54,13 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
              0.4229992, 0.4229992, 0.4395444, 0.4130720, 0.1814385)
 
       y <- c(1.8209676, 1.6488970, 1.5893341, 1.3907911, 1.2815924, 1.1790119, 1.0598861,
-             0.9539965, 1.5264621, 1.3146829+0.1, 1.0764314, 1.2319567, 1.0135594, 0.8183255,
+             0.9539965, 1.5264621, 1.3146829+0.1, 1.0764314 + 0.01, 1.2319567, 1.0135594, 0.8183255,
              0.6528730, 0.4642571, 0.2557870, 0.1532064, 1.8242766)
       img_path <- "Body Images/body_male_front_background_removed.png"
 
     } else if (body_view == "back" || body_view == "posterior") {
-      x <- c(0.4891802, 0.4891802, 0.3502001, 0.2807100, 0.2774010, 0.2376924, 0.1913657,
-             0.1516571, 0.4891802, 0.4924892, 0.4891802, 0.4891802, 0.3634363, 0.3998358,
+      x <- c(0.4891802, 0.4891802, 0.3502001, 0.2807100, 0.2774010 - 0.02, 0.2376924 - 0.02, 0.1913657 - 0.02,
+             0.1516571 - 0.03, 0.4891802, 0.4924892, 0.4891802, 0.4891802, 0.3634363, 0.3998358,
              0.4229992, 0.4229992, 0.4395444, 0.4130720, 0.1814385)
 
       y <- c(1.85, 1.72, 1.5893341, 1.3907911, 1.2815924, 1.1790119, 1.0598861,
@@ -72,7 +72,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
 
       x <- c(0.45888956, 0.46621550, 0.37830424, 0.28673002, 0.16951501, 0.19881876, 0.19881876,
              0.18782986, 0.52482300, 0.38196721, 0.37464128, 0.56877863, 0.48453034, 0.43691175,
-             0.41127097, 0.37830424, 0.37464128, 0.44790065, 0.07427782)
+             0.41127097, 0.37830424, 0.37464128, 0.44790065, 0.07427782 + 0.1)
 
       y <- c( 1.8518703, 1.6723848, 1.5405179, 1.4159770, 1.3244028, 1.1815470, 1.0350282,
               0.9434540, 1.4745845, 1.3463806, 1.1449173, 1.2548063, 1.0386912, 0.8225760,
@@ -89,6 +89,8 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     plot_data <- data %>%
       left_join(body_coords, by = "Body.area")
 
+    plot_data_labels <- plot_data
+
     if (body_view %in% c("front", "anterior", "back", "posterior")) {
       plot_data <- bind_rows(
         plot_data,
@@ -101,7 +103,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     mutate(radius = max_radius)
 
     if (!include_unspecified) {
-      plot_data <- plot_data %>% filter(Body.area != "Region unspecified")
+      plot_data <- plot_data %>% filter(Body.area != "Unspecified")
     }
 
     body_img <- readPNG(img_path)
@@ -114,11 +116,10 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
         aes(x0 = x, y0 = y - 0.5, r = radius, fill = Frequency),
         colour = NA, alpha = 0.7
       ) +
-      #scale_fill_gradient(low = low_colour, high = high_colour) +
       coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
       theme_void() +
       ggtitle(title) +
-     theme(plot.title = element_text(size = 20))
+      theme(plot.title = element_text(size = 20))
 
       if(colourblind_friendly==TRUE){
         p <- p+ scale_fill_viridis(option = colourOption, begin = 0.1, end = 0.9)
@@ -127,11 +128,45 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
       }
 
       if (show_labels) {
-        p <- p+ geom_text(
-          data = plot_data,
-          aes(x = x, y = y - 0.6, label = paste0(Body.area, "\n", Frequency)),
-          size = 3, vjust = -1, color = "black"
+        plot_data_labels <- plot_data_labels %>%
+          mutate(
+            label_side = ifelse(y > 0.9, "left", "right"),
+            label_side = ifelse(Body.area == "Head", "right", label_side),
+            label_side = ifelse(Body.area == "Thoracic spine", "right", label_side),
+            label_side = ifelse(Body.area == "Chest", "right", label_side),
+            label_side = ifelse(Body.area == "Abdomen", "right", label_side),
+            label_side = ifelse(Body.area == "Lumbosacral", "right", label_side),
+            label_side = ifelse(Body.area == "Hip and groin", "right", label_side),
+            label_x = ifelse(label_side == "right", 0.95, 0.1),
+            label_x = ifelse(Body.area == "Hand", 0.025, label_x),
+            label_y = y - 0.5,
+            label_y = ifelse(Body.area == "Shoulder", 1.5893341 - 0.55, label_y),
+          )
+
+        p <- p + geom_curve(
+          data = plot_data_labels,
+          aes(x = x, y = y - 0.5, xend = label_x, yend = label_y),
+          curvature = 0.3,
+          color = "black",
+          linewidth = 0.3,
+          arrow = arrow(length = unit(0.01, "npc"))
         )
+
+        p <- p + geom_text(
+          data = plot_data_labels,
+          aes(x = label_x, y = label_y + 0.02, label = Body.area),  # or Body.region
+          hjust = ifelse(plot_data_labels$label_side == "right", 0, 1),
+          fontface = "bold",
+          size = 2.5
+        )
+
+        p <- p + geom_text(
+          data = plot_data_labels,
+          aes(x = label_x, y = label_y - 0.02, label = Frequency),
+          hjust = ifelse(plot_data_labels$label_side == "right", 0, 1),
+          size = 2
+        )
+
       }
    p
 
@@ -140,22 +175,14 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     body_order <- c("Head and neck", "Upper limb", "Trunk",
                     "Lower limb", "Unspecified")
 
-    #data <- #data %>%
-     # mutate(Body.region = factor(Body.region, levels = body_order)) %>%
     data <- aggregate(Frequency ~ Body.region, data = data, sum) %>%
       arrange(Body.region)
 
     data <- data %>%
       mutate(Body.region = factor(Body.region, levels = body_order)) %>%
       arrange(Body.region)
-    #%>%
-    #  arrange(Body.region)
 
-    max_radius <- 0.04
-
-    # For symmetric body parts
-    # symmetric_areas <- c("Head and neck", "Upper limb", "Trunk",
-    #                      "Lower limb", "Unspecified")
+    max_radius <- 0.07
 
     if(body_view == "front" || body_view== "anterior"){
       x <- c(0.4868586, 0.4909954, 0.4868586, 0.4868586, 0.1600564)
@@ -181,14 +208,8 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
     # Merge frequencies with coordinates
     plot_data <- data %>%
       left_join(body_coords, by = "Body.region")
-#
-#     if (body_view %in% c("front", "back")) {
-#       plot_data <- bind_rows(
-#         plot_data,
-#         filter(plot_data, Body.region %in% symmetric_areas) %>%
-#           mutate(x = 0.99 - x)
-#       )
-#     }
+
+    plot_data_labels <- plot_data
 
     plot_data <- plot_data %>%
       mutate(radius = max_radius)
@@ -207,9 +228,6 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
         aes(x0 = x, y0 = y - 0.5, r = radius, fill = Frequency),
         colour = NA, alpha = 0.7
       ) +
-   #   scale_fill_gradient(low = low_colour, high = high_colour) +
-      # scale_color_brewer(palette = colour_palette) +
-     # scale_fill_gradient(low = low_colour, high = high_colour) +
       coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
       theme_void() +
       ggtitle(title)+
@@ -222,11 +240,45 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
       }
 
       if (show_labels) {
-        p <- p + geom_text(
-          data = plot_data,
-          aes(x = x, y = y - 0.6, label = paste0(Body.region, "\n", Frequency)),
-          size = 3, vjust = -1, color = "black"
+        # p <- p + geom_text(
+        #   data = plot_data,
+        #   aes(x = x, y = y - 0.6, label = paste0(Body.region, "\n", Frequency)),
+        #   size = 3, vjust = -1, color = "black"
+        # )
+
+        plot_data_labels <- plot_data_labels %>%
+          mutate(
+            label_side = ifelse(y > 0.9, "left", "right"),
+            label_side = ifelse(Body.region == "Head and neck", "right", label_side),
+            label_x = ifelse(label_side == "right", 0.95, 0.1),
+            label_x = ifelse(Body.region == "Head and neck", 0.9, label_x),
+            label_y = y - 0.5,
+          )
+
+        p <- p + geom_curve(
+          data = plot_data_labels,
+          aes(x = x, y = y - 0.5, xend = label_x, yend = label_y),
+          curvature = 0.3,
+          color = "black",
+          linewidth = 0.3,
+          arrow = arrow(length = unit(0.01, "npc"))
         )
+
+        p <- p + geom_text(
+          data = plot_data_labels,
+          aes(x = label_x, y = label_y + 0.02, label = Body.region),  # or Body.region
+          hjust = ifelse(plot_data_labels$label_side == "right", 0, 1),
+          fontface = "bold",
+          size = 3.5
+        )
+
+        p <- p + geom_text(
+          data = plot_data_labels,
+          aes(x = label_x, y = label_y - 0.02, label = Frequency),
+          hjust = ifelse(plot_data_labels$label_side == "right", 0, 1),
+          size = 3
+        )
+
       }
     p
   }
