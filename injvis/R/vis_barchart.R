@@ -5,16 +5,18 @@
 #' @param data Sports injury data, with columns Tissue, Pathology.Type and Frequency
 #' @param colourblind_friendly Boolean variable indicating whether to use a colourblind friendly colour palette
 #' @param colourOption Option to choose which colourblind friendly palette from the package viridis, either "A", "B", "C", "E", "F", "G" or "H" (Default is "A")
+#' @param tissue_view Option to only view tissue type frequency
 #'
 #' @return Coloured barchart of sports injury data at tissue and pathology type level
 #' @export
 #'
 #' @examples
 #' vis_barchart(injuryTissuePathTable)
-#' vis_barchart(injuryTissuePathTable, colourblind = TRUE)
-#' vis_barchart(injuryTissuePathTable, colourblind = TRUE, colourOption = "D")
+#' vis_barchart(injuryTissuePathTable, tissue_view = TRUE)
+#' vis_barchart(injuryTissuePathTable, tissue_view = TRUE, colourblind = TRUE)
+#' vis_barchart(injuryTissuePathTable, tissue_view = TRUE, colourblind = TRUE, colourOption = "D")
 #'
-vis_barchart <- function(data, colourblind_friendly = FALSE, colourOption = "A", tissue_view = FALSE) {
+vis_barchart <- function(data, tissue_view = FALSE, colourblind_friendly = FALSE, colourOption = "A") {
   library(ggplot2)
   library(dplyr)
   library(viridis)
@@ -23,7 +25,7 @@ vis_barchart <- function(data, colourblind_friendly = FALSE, colourOption = "A",
     data_summary <- data %>%
       group_by(Tissue) %>%
       summarise(Frequency = sum(Frequency)) %>%
-      mutate(Tissue = factor(Tissue, levels = Tissue))
+      mutate(Tissue = factor(Tissue, levels = c(setdiff(Tissue, "Non-specific"), "Non-specific")))
 
     barchart <- ggplot(data_summary, aes(x = Tissue, y = Frequency, fill = Tissue)) +
       geom_col() +
