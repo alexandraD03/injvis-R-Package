@@ -106,19 +106,6 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
     body_img <- readPNG(img_path)
     body_grob <- rasterGrob(body_img, width = unit(1, "npc"), height = unit(2, "npc"))
 
-    # ggplot() +
-    #   annotation_custom(body_grob, xmin = 0, xmax = 1, ymin = 0, ymax = 1) +
-    #   geom_circle(
-    #     data = plot_data,
-    #     aes(x0 = x, y0 = y - 0.5, r = radius, fill = Frequency),
-    #     colour = NA, alpha = 0.7
-    #   ) +
-    #   scale_fill_viridis(option = colourOption, begin = 0.1, end = 0.9) +
-    #   coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
-    #   theme_void() +
-    #   ggtitle(title) +
-    #   theme(plot.title = element_text(size = 20))
-
     p<- ggplot() +
       annotation_custom(body_grob, xmin = 0, xmax = 1, ymin = 0, ymax = 1) +
       geom_circle(
@@ -126,7 +113,6 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
         aes(x0 = x, y0 = y - 0.5, r = radius, fill = Frequency),
         colour = NA, alpha = 0.7
       ) +
-      #scale_fill_gradient(low = low_colour, high = high_colour) +
       coord_fixed(xlim = c(-0.1, 1.1), ylim = c(-0.4, 1.4)) +
       theme_void() +
       ggtitle(title) +
@@ -139,12 +125,6 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
     }
 
     if (show_labels) {
-      # p <- p+ geom_text(
-      #   data = plot_data,
-      #   aes(x = x, y = y - 0.6, label = paste0(Body.area, "\n", Frequency)),
-      #   size = 3, vjust = -1, color = "black"
-      # )
-
       plot_data_labels <- plot_data_labels %>%
         mutate(
           label_side = ifelse(y > 0.9, "left", "right"),
@@ -173,7 +153,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
 
       p <- p + geom_text(
         data = plot_data_labels,
-        aes(x = label_x, y = label_y + 0.02, label = Body.area),  # or Body.region
+        aes(x = label_x, y = label_y + 0.02, label = Body.area),
         hjust = ifelse(plot_data_labels$label_side == "right", 0, 1),
         fontface = "bold",
         size = 2.5
@@ -258,11 +238,6 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
     }
 
     if (show_labels) {
-      # p <- p + geom_text(
-      #   data = plot_data,
-      #   aes(x = x, y = y - 0.6, label = paste0(Body.region, "\n", Frequency)),
-      #   size = 3, vjust = -1, color = "black"
-      # )
       plot_data_labels <- plot_data_labels %>%
         mutate(
           label_side = ifelse(y > 0.9, "left", "right"),
@@ -283,7 +258,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
 
       p <- p + geom_text(
         data = plot_data_labels,
-        aes(x = label_x, y = label_y + 0.02, label = Body.region),  # or Body.region
+        aes(x = label_x, y = label_y + 0.02, label = Body.region),
         hjust = ifelse(plot_data_labels$label_side == "right", 0, 1),
         fontface = "bold",
         size = 3.5

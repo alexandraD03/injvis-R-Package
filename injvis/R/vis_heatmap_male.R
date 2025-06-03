@@ -40,9 +40,6 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
       arrange(Body.area)
 
     max_radius <- 0.04
-    #max_radius <- c(0.06, 0.04, 0.05, 0.04, 0.04, 0.04, 0.04, 0.04, 0.06,
-           #    0.04, 0.04, 0.055, 0.045, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04)
-
 
     # For symmetric body parts
     symmetric_areas <- c("Hand", "Foot", "Wrist", "Ankle", "Shoulder", "Elbow",
@@ -154,7 +151,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
 
         p <- p + geom_text(
           data = plot_data_labels,
-          aes(x = label_x, y = label_y + 0.02, label = Body.area),  # or Body.region
+          aes(x = label_x, y = label_y + 0.02, label = Body.area),
           hjust = ifelse(plot_data_labels$label_side == "right", 0, 1),
           fontface = "bold",
           size = 2.5
@@ -240,12 +237,6 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
       }
 
       if (show_labels) {
-        # p <- p + geom_text(
-        #   data = plot_data,
-        #   aes(x = x, y = y - 0.6, label = paste0(Body.region, "\n", Frequency)),
-        #   size = 3, vjust = -1, color = "black"
-        # )
-
         plot_data_labels <- plot_data_labels %>%
           mutate(
             label_side = ifelse(y > 0.9, "left", "right"),
@@ -266,7 +257,7 @@ vis_heatmap_male <- function(data, body_view, low_colour, high_colour, title, bo
 
         p <- p + geom_text(
           data = plot_data_labels,
-          aes(x = label_x, y = label_y + 0.02, label = Body.region),  # or Body.region
+          aes(x = label_x, y = label_y + 0.02, label = Body.region),
           hjust = ifelse(plot_data_labels$label_side == "right", 0, 1),
           fontface = "bold",
           size = 3.5
