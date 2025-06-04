@@ -1,10 +1,10 @@
-#' Heatmap of the female human body
+#' Heatmap of the human body (gender neutral)
 #'
 #' @description
-#' Generate a heatmap of sports injury data onto a female human body with different anatomical views.
+#' Generate a heatmap of sports injury data onto a gender neutral human body with different anatomical views.
 #'
 #' @param data Sports injury data, with columns Body.area, Body.region and Frequency
-#' @param body_view Anatomical view of female body (either front/anterior, back/posterior or side/lateral)
+#' @param body_view Anatomical view of gender neutral body (either front/anterior, back/posterior or side/lateral)
 #' @param low_colour Low colour for gradient colouring of heatmap
 #' @param high_colour High colour for gradient colouring of heatmap
 #' @param title Title of heatmap
@@ -14,14 +14,13 @@
 #' @param colourblind_friendly Boolean variable indicating whether to use a colourblind friendly colour palette for heatmap gradient
 #' @param colourOption  Option to choose which colourblind friendly palette from the package viridis, either "A", "B", "C", "E", "F", "G" or "H" (Default is "E")
 #'
-#'
-#' @return Frequency heatmap of injury data on a female human body
+#' @return Frequency heatmap of injury data on a gender neutral human body
 #' @export
 #'
-#' @examples vis_heatmap_female(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body", body_region = FALSE, show_labels = TRUE, include_unspecified = TRUE)
-#' vis_heatmap_female(injuryDataTable, "back", "blue", "green", "Heat Map of Back Body", body_region = TRUE)
-#' vis_heatmap_female(injuryDataTable, "side", "yellow", "red", "Heat Map of Side Body", include_unspecified = FALSE)
-vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, body_region=FALSE, show_labels = FALSE, include_unspecified = TRUE, colourblind_friendly = FALSE, colourOption = "E"){
+#' @examples vis_heatmap_neutral(injuryDataTable, "front", "yellow", "red", "Heat Map of Front Body", body_region = FALSE, show_labels = TRUE, include_unspecified = TRUE)
+#' vis_heatmap_neutral(injuryDataTable, "back", "blue", "green", "Heat Map of Back Body", body_region = TRUE)
+#' vis_heatmap_neutral(injuryDataTable, "side", "yellow", "red", "Heat Map of Side Body", include_unspecified = FALSE)
+vis_heatmap_neutral <- function(data, body_view, low_colour, high_colour, title, body_region=FALSE, show_labels = FALSE, include_unspecified = TRUE, colourblind_friendly = FALSE, colourOption = "E"){
   library(grid)
   library(png)
   library(ggplot2)
@@ -30,7 +29,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
   library(viridis)
 
   if(body_region==FALSE){
-  # In case data is not in desired order
+    # In case data is not in desired order
     body_order <- c(
       "Head", "Neck", "Shoulder", "Upper arm", "Elbow", "Forearm", "Wrist", "Hand",
       "Chest", "Thoracic spine", "Lumbosacral", "Abdomen", "Hip and groin", "Thigh",
@@ -47,36 +46,45 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
                          "Knee", "Hip and groin", "Forearm", "Upper arm", "Thigh", "Lower leg")
 
     if(body_view == "front" || body_view == "anterior"){
-      x <- c(0.4880855, 0.4880855, 0.2910387, 0.2739042, 0.2396352, 0.2182170, 0.1710971,
-             0.1282609, 0.4838019, 0.4880855, 0.4880855, 0.4838019, 0.3338750, 0.3767112,
-             0.4152639, 0.4152639, 0.4366820, 0.4238311, 0.1882316)
+      x <- c(0.4891802, 0.4891802, 0.3502001, 0.2807100, 0.2774010 - 0.02, 0.2376924 - 0.03, 0.1913657 - 0.02,
+             0.1516571, 0.4891802, 0.4924892, 0.4891802, 0.4891802, 0.3634363, 0.3998358,
+             0.4229992, 0.4229992, 0.4395444, 0.4130720 + 0.02, 0.1814385)
 
-      y <- c(1.82496679, 1.62791995, 1.54653104, 1.39232046, 1.28951342, 1.19527362, 1.07533206,
-             0.98109227, 1.50797839, 1.34948419, 1.10103383, 1.22954264, 1.07961569, 0.88256885,
-             0.60413309, 0.40708625, 0.18862127, 0.09009785, 1.78213052)
-      img_path <- "Body Images/body_female_front_background_removed.png"
+      y <- c(1.8209676, 1.6488970, 1.5893341 - 0.04, 1.3907911, 1.2815924, 1.1790119, 1.0598861,
+             0.9539965, 1.5264621, 1.3146829+0.1, 1.0764314 + 0.01, 1.2319567, 1.0135594, 0.8183255,
+             0.6528730 - 0.05, 0.4642571 - 0.05, 0.2557870 -0.04, 0.1532064 - 0.04, 1.8242766)
+      img_path <- "Body Images/body_neutral_front_background_removed.png"
 
-    } else if (body_view == "back"|| body_view == "posterior") {
-      x <- c(0.5009364, 0.5009364, 0.3552931, 0.2781878, 0.2567697, 0.2139334, 0.1882316,
-             0.1282609, 0.5009364, 0.5009364, 0.4966528, 0.4966528, 0.3338750, 0.3895621,
-             0.4109803, 0.4238311, 0.4452493, 0.4109803, 0.2096498)
+    } else if (body_view == "back" || body_view == "posterior") {
+      x <- c(0.4891802, 0.4891802, 0.3502001, 0.2807100, 0.2774010 - 0.02, 0.2376924 - 0.02, 0.1913657 - 0.02,
+             0.1516571 - 0.03, 0.4891802, 0.4924892, 0.4891802, 0.4891802, 0.3634363, 0.3998358,
+             0.4229992, 0.4229992, 0.4395444, 0.4130720 + 0.02, 0.1814385)
 
-      y <- c(1.8421013, 1.6493381, 1.5679492, 1.4351567, 1.2809462, 1.1909900, 1.0753321,
-             0.9639578, 1.5465310, 1.4265895, 1.1652882, 1.2937970, 1.1395865, 0.8825688,
-             0.6341185, 0.4156535, 0.1929049, 0.1029487, 1.7864142)
-      img_path <- "Body Images/body_female_back_background_removed.png"
+      y <- c(1.85, 1.72, 1.5893341 - 0.04, 1.3907911, 1.2815924, 1.1790119, 1.0598861,
+             0.9539965, 1.5264621, 1.3146829, 1.0764314, 1.2319567, 1.0135594, 0.8183255,
+             0.6528730 - 0.05, 0.4642571 - 0.05, 0.2557870 - 0.04, 0.1532064 - 0.04, 1.8242766)
+      img_path <- "Body Images/body_neutral_back_background_removed.png"
 
     } else if (body_view == "side" || body_view == "lateral") {
-     x <- c(0.4321545, 0.4396580, 0.3871336, 0.4621685 - 0.01, 0.5034376,
-        0.5972313 - 0.06, 0.6722662 - 0.07, 0.7397976 - 0.06, 0.6159900 - 0.01, 0.3908853,
-        0.4171475, 0.6422522 - 0.04, 0.4846789, 0.4884307, 0.4921824,
-        0.4021405, 0.4171475, 0.5109411, 0.1154100 + 0.02)
 
-      y <- c(1.86134830, 1.66250582, 1.55745696, 1.43740112, 1.29108306,
-        1.17102722, 1.07348185, 0.99469521, 1.45240810 - 0.02, 1.36986971,
-        1.19353769 - 0.01, 1.27607608, 0.97593648, 0.81836319, 0.58950675,
-        0.38316077, 0.19557352, 0.09052466 - 0.02, 1.88+0.05)
-      img_path <- "Body Images/body_female_side_background_removed.png"
+      # x <- c(0.45888956, 0.46621550, 0.37830424, 0.28673002, 0.16951501, 0.19881876, 0.19881876,
+      #        0.18782986, 0.52482300, 0.38196721, 0.37464128, 0.56877863, 0.48453034, 0.43691175,
+      #        0.41127097, 0.37830424, 0.37464128, 0.44790065, 0.07427782 + 0.1) + 0.09
+      #
+      # y <- c( 1.8518703, 1.6723848, 1.5405179, 1.4159770, 1.3244028, 1.1815470, 1.0350282,
+      #         0.9434540, 1.4745845, 1.3463806, 1.1449173, 1.2548063, 1.0386912, 0.8225760,
+      #         0.5918090, 0.4233124, 0.2291750, 0.1339378, 1.8225665)
+      x <- c(0.4896153, 0.4561093, 0.4317413, 0.4652473, 0.4774313,
+        0.5048453, 0.5535812, 0.6114552, 0.5627192, 0.3860514,
+        0.4134654, 0.5749032, 0.4743853, 0.4926613, 0.5292132 - 0.02,
+        0.4561093, 0.4469713, 0.5170292, 0.2337515
+      )
+
+      y <- c(1.84460536, 1.66489154, 1.53391367, 1.38465982, 1.25368196,
+        1.15316406, 1.04960016, 0.95517426, 1.44253377, 1.34201587,
+        1.16230205, 1.22017599, 0.97954223, 0.82115040, 0.58660863 - 0.02,
+        0.40689481, 0.21195101, 0.09011114, 1.88115732)
+      img_path <- "Body Images/body_neutral_side_background_removed.png"
 
     } else {
       print("Please choose an appropriate body view (either front/anterior, back/posterior or side/lateral)")
@@ -94,7 +102,7 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
       plot_data <- bind_rows(
         plot_data,
         filter(plot_data, Body.area %in% symmetric_areas) %>%
-          mutate(x = 0.99 - x)
+          mutate(x = 1 - x)
       )
     }
 
@@ -138,11 +146,8 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
           label_side = ifelse(Body.area == "Hip and groin", "right", label_side),
           label_x = ifelse(label_side == "right", 0.95, 0.1),
           label_x = ifelse(Body.area == "Hand", 0.025, label_x),
-          label_x = ifelse(Body.area == "Wrist", 0.025, label_x),
           label_y = y - 0.5,
           label_y = ifelse(Body.area == "Shoulder", 1.5893341 - 0.55, label_y),
-          label_y = ifelse(Body.area == "Hip and groin", y - 0.6, label_y),
-          label_y = ifelse(Body.area == "Foot", y - 0.47, label_y)
         )
 
       p <- p + geom_curve(
@@ -168,10 +173,11 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
         hjust = ifelse(plot_data_labels$label_side == "right", 0, 1),
         size = 2
       )
+
     }
     p
 
-  } else if (body_region == TRUE) {
+  } else if (body_region == TRUE){
     # In case data is not in desired order
     body_order <- c("Head and neck", "Upper limb", "Trunk",
                     "Lower limb", "Unspecified")
@@ -186,19 +192,19 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
     max_radius <- 0.07
 
     if(body_view == "front" || body_view== "anterior"){
-      x <- c(0.4848212, 0.4848212, 0.4848212, 0.4848212, 0.1552725)
-      y <- c(1.8132487, 1.5432018, 1.2685779, 0.8383338, 1.8727505)
-      img_path <- "Body Images/body_female_front_background_removed.png"
+      x <- c(0.4868586 + 0.02, 0.4909954 + 0.01, 0.4868586 + 0.01, 0.4868586 + 0.01, 0.1600564)
+      y <- c(1.7520395 + 0.02, 1.5907068 - 0.02, 1.2597678, 0.7344023, 1.7892701)
+      img_path <- "Body Images/body_neutral_front_background_removed.png"
 
     } else if (body_view == "back" || body_view == "posterior") {
-      x <- c(0.4985524, 0.4939753, 0.4939753, 0.4939753, 0.1598496)
-      y <- c(1.7766321, 1.5752413, 1.2868862, 0.8703733, 1.8681734)
-      img_path <- "Body Images/body_female_back_background_removed.png"
+      x <- c(0.4951321, 0.4951321, 0.4951321, 0.4909954, 0.1848769)
+      y <- c(1.7768599, 1.5782966, 1.2639046, 0.8336839, 1.8140906)
+      img_path <- "Body Images/body_neutral_back_background_removed.png"
 
     } else if (body_view == "side" || body_view == "lateral") {
-      x <- c(0.4710900, 0.4436276, 0.4482047 + 0.02, 0.4848212, 0.1095018 + 0.03)
-      y <- c(1.8269798, 1.4882770, 1.1861907, 0.7467925, 2.0146395 - 0.12)
-      img_path <- "Body Images/body_female_side_background_removed.png"
+      x <- c(0.4785852, 0.4330811, 0.4909954, 0.4992689, 0.2096973)
+      y <- c(1.7148089, 1.5203822, 1.2266739, 0.8378207, 1.8389110)
+      img_path <- "Body Images/body_neutral_side_background_removed.png"
 
     } else {
       print("Please choose an appropriate body view (either front/anterior, back/posterior or side/lateral)")
@@ -273,7 +279,9 @@ vis_heatmap_female <- function(data, body_view, low_colour, high_colour, title, 
         hjust = ifelse(plot_data_labels$label_side == "right", 0, 1),
         size = 3
       )
+
     }
     p
   }
 }
+
