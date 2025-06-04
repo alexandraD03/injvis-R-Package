@@ -111,6 +111,7 @@ vis_heatmap_neutral <- function(data, body_view, low_colour, high_colour, title,
 
     if (!include_unspecified) {
       plot_data <- plot_data %>% filter(Body.area != "Unspecified")
+      plot_data_labels <- plot_data_labels %>% filter(Body.area != "Unspecified")
     }
 
     body_img <- readPNG(img_path)
@@ -223,6 +224,7 @@ vis_heatmap_neutral <- function(data, body_view, low_colour, high_colour, title,
 
     if (!include_unspecified) {
       plot_data <- plot_data %>% filter(Body.region != "Unspecified")
+      plot_data_labels <- plot_data_labels %>% filter(Body.region != "Unspecified")
     }
 
     body_img <- readPNG(img_path)
